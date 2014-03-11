@@ -69,5 +69,39 @@ this.recline.Backend.Github  = this.recline.Backend.Github || {}
     var git =  new Git(dataset, my.gitOptions)
     git.fetch()
   }
+  
+  //query 
+  my.query(queroObj, dataset , cache=false){
+    var dfd = new Deferred();
+    var numRows = queryObj.size || this.records.length;
+    var start = queryObj.from || 0;
+
+    if(cache)dataset.fetch()
+    results= dataset.records
+
+    //Apply filter
+    results = this._applyFilters(results, queryObj);
+    results = this._applyFreeTextQuery(results, queryObj);
+
+    function _applyFreeTextQuery(results, queroObj){
+       //todo
+    }
+    function _applyFilters(results, queryObj){
+    	 //todo
+    }
+    function _computeFacets = function(results, queryObj){
+      //todo
+    }
+    // Apply facet
+    var facets = this.computeFacets(results, queryObj);
+    var out = {
+        total: results.length,
+        hits: results.slice(start, start+numRows),
+        facets: facets
+    };
+    dfd.resolve(out);
+    return dfd.promise();
+  }
+
 }(this.recline.Backend.Github)
 
